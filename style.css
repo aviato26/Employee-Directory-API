@@ -1,0 +1,28 @@
+
+section {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around
+}
+
+article {
+  border: 2px solid lightgrey;
+  border-radius: 10px;
+  width: 25%;
+  padding: 2%;
+  margin: 20px 0;
+  overflow: auto;
+}
+
+img {
+  border-radius: 90px;
+  float: left;
+  }
+
+h3{
+  margin-left: 45%;
+}
+
+p{
+  margin-left: 45%;
+}
