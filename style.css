@@ -26,3 +26,24 @@ h3{
 p{
   margin-left: 45%;
 }
+
+.modalBackGround {
+  background-color: rgba(0,0,0,0.6);
+  z-index: 1
+}
+
+.modal img{
+  float: none;
+  margin: auto;
+  display: block;
+}
+
+.modal{
+  display: block;
+  text-align: center;
+  background-color: white;
+  width: 30%;
+  height: 50%;
+  z-index: 1;
+  position: fixed
+}
