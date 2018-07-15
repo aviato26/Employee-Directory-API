@@ -1,8 +1,10 @@
 
-const body = document.querySelector('body');
+let body = document.querySelector('body');
 let arts = document.querySelectorAll('article');
 let people = [...arts];
+let input = document.querySelector('input');
 let section = document.querySelector('section');
+let modalBG = document.createElement('section');
 let bg = document.createElement('article');
 let modalImg = document.createElement('img');
 let modalName = document.createElement('h2');
@@ -11,6 +13,9 @@ let mCity = document.createElement('p');
 let mPhoneNumber = document.createElement('p');
 let mAddress = document.createElement('p');
 let mBirthday = document.createElement('p');
+let close = document.createElement('span');
+modalBG.appendChild(bg);
+bg.appendChild(close);
 bg.appendChild(modalImg);
 bg.appendChild(modalName);
 bg.appendChild(mEmail);
@@ -26,19 +31,32 @@ let loc;
 let date;
 let dateFormat;
 
+input.addEventListener('keyup', (e) => {
+  let search = e.target.value;
+  people.map(c => {
+    if(c.children[1].innerHTML.indexOf(search) >= 0){
+      c.style.display = 'block'
+    } else{
+      c.style.display = 'none'
+    }
+  })
+})
+
 let modal = (a,x) => {
   date = a[x].dob.date;
   dateFormat = new Date(date);
-  section.appendChild(bg);
-  body.className = 'modalBackGround';
+  section.appendChild(modalBG);
+  modalBG.appendChild(bg);
+  modalBG.className = 'modalBackGround';
   bg.className = 'modal';
+  close.innerHTML = 'X';
   modalImg.src = a[x].picture.large;
   modalName.innerHTML = `${a[x].name.first} ${a[x].name.last}`;
   mEmail.innerHTML = a[x].email;
   mCity.innerHTML = a[x].location.city;
   mPhoneNumber.innerHTML = a[x].phone;
   mAddress.innerHTML = `${a[x].location.street}, ${a[x].location.state} ${a[x].location.postcode}`;
-  mBirthday.innerHTML = `Birthday: ${dateFormat.getMonth()}/${dateFormat.getDate()}/${dateFormat.getFullYear()}`
+  mBirthday.innerHTML = `Birthday: ${dateFormat.getMonth()}/${dateFormat.getDate()}/${dateFormat.getFullYear()}`;
 }
 
 let apply = (index, img, name, email, loc) => {
@@ -61,11 +79,19 @@ fetch('https://randomuser.me/api/?results=12')
    loc = results[x].location.city;
    apply(x, img, name, email, loc)
  }
- 
- people.forEach((c,i) => {
-   c.addEventListener('click', function(e){
-     modal(results, i)
-   })
 
+ people.forEach((c,i) => {
+   c.addEventListener('click', () => {
+       modal(results, i);
+       modalBG.style.display = '';
+   })
  })
+
+ close.addEventListener('click', () => {
+   bg.className = '';
+   modalBG.className = '';
+   modalBG.style.display = 'none';
+ })
+
 })
+.catch((error) => console.log('request failed', error))
