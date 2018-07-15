@@ -1,5 +1,4 @@
 
-let body = document.querySelector('body');
 let arts = document.querySelectorAll('article');
 let people = [...arts];
 let input = document.querySelector('input');
@@ -31,16 +30,26 @@ let loc;
 let date;
 let dateFormat;
 
-input.addEventListener('keyup', (e) => {
-  let search = e.target.value;
-  people.map(c => {
-    if(c.children[1].innerHTML.indexOf(search) >= 0){
-      c.style.display = 'block'
-    } else{
-      c.style.display = 'none'
+
+let imgChange = (fn, a, b) => {
+  let change = b;
+  document.addEventListener('keydown', (e) => {
+    if(modalBG.className === 'modalBackGround'){
+      if(e.key === 'ArrowRight'){
+        if(change < 11){
+          change++;
+          fn(a, change)
+        }
+      }
+     else if(e.key === 'ArrowLeft'){
+       if(change > 0){
+         change--;
+          fn(a, change)
+        }
+      }
     }
   })
-})
+}
 
 let modal = (a,x) => {
   date = a[x].dob.date;
@@ -55,7 +64,7 @@ let modal = (a,x) => {
   mEmail.innerHTML = a[x].email;
   mCity.innerHTML = a[x].location.city;
   mPhoneNumber.innerHTML = a[x].phone;
-  mAddress.innerHTML = `${a[x].location.street}, ${a[x].location.state} ${a[x].location.postcode}`;
+  mAddress.innerHTML = `${a[x].location.street}, ${a[x].location.state}, ${a[x].location.postcode}`;
   mBirthday.innerHTML = `Birthday: ${dateFormat.getMonth()}/${dateFormat.getDate()}/${dateFormat.getFullYear()}`;
 }
 
@@ -84,6 +93,7 @@ fetch('https://randomuser.me/api/?results=12')
    c.addEventListener('click', () => {
        modal(results, i);
        modalBG.style.display = '';
+       imgChange(modal, results, i);
    })
  })
 
@@ -95,3 +105,16 @@ fetch('https://randomuser.me/api/?results=12')
 
 })
 .catch((error) => console.log('request failed', error))
+
+input.addEventListener('keyup', (e) => {
+  let search = e.target.value;
+  people.map(c => {
+    if(c.children[1].innerHTML.indexOf(search) >= 0){
+      c.style.display = 'block'
+    } else{
+      c.style.display = 'none'
+    }
+  })
+})
+
+modalBG.insertAdjacentHTML('beforeend', `<span style='color: white; padding: 2% 0 0 0'>feel free to use the left and right arrow keys to select different profiles</span>`)
