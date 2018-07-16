@@ -1,4 +1,5 @@
 
+// create and append all dynamic elements
 let arts = document.querySelectorAll('article');
 let people = [...arts];
 let input = document.querySelector('input');
@@ -30,7 +31,7 @@ let loc;
 let date;
 let dateFormat;
 
-
+// the function responsible for the changing the imgages in the modal window
 let imgChange = (fn, a, b) => {
   let change = b;
   document.addEventListener('keydown', (e) => {
@@ -51,6 +52,7 @@ let imgChange = (fn, a, b) => {
   })
 }
 
+// the modal function will create and append the modal window
 let modal = (a,x) => {
   date = a[x].dob.date;
   dateFormat = new Date(date);
@@ -68,6 +70,7 @@ let modal = (a,x) => {
   mBirthday.innerHTML = `Birthday: ${dateFormat.getMonth()}/${dateFormat.getDate()}/${dateFormat.getFullYear()}`;
 }
 
+// apply function takes the index from the for-in loop and the properties for from the api and inserts it into the article elements
 let apply = (index, img, name, email, loc) => {
   for(i = index; i < people.length; i++){
     people[i].children[0].src = img;
@@ -77,10 +80,13 @@ let apply = (index, img, name, email, loc) => {
   }
 }
 
+// fetch the random users from the api
 fetch('https://randomuser.me/api/?results=12')
 .then(res => res.json())
 .then(res => {
  let results = res.results;
+
+// loop through the results object and pass the values to the apply function
  for(x in results){
    img = results[x].picture.large;
    name = `${results[x].name.first} ${results[x].name.last}`;
@@ -89,6 +95,7 @@ fetch('https://randomuser.me/api/?results=12')
    apply(x, img, name, email, loc)
  }
 
+// adds a click event to the article elements and opens the modal window
  people.forEach((c,i) => {
    c.addEventListener('click', () => {
        modal(results, i);
@@ -97,6 +104,7 @@ fetch('https://randomuser.me/api/?results=12')
    })
  })
 
+// functionality for the modal close button
  close.addEventListener('click', () => {
    bg.className = '';
    modalBG.className = '';
@@ -106,6 +114,7 @@ fetch('https://randomuser.me/api/?results=12')
 })
 .catch((error) => console.log('request failed', error))
 
+// event for the search functionality
 input.addEventListener('keyup', (e) => {
   let search = e.target.value;
   people.map(c => {
